@@ -1,0 +1,123 @@
+openapi: 3.0.3
+info:
+  title: FarmStall API
+  version: v1
+servers:
+- url: https://farmstall.designapis.com/v1  
+paths: 
+  /reviews:
+    get:
+      description: Get a bunch of reviews.
+      parameters:
+      - name: maxRating
+        description: Filter the reviews by the maximum rating
+        in: query
+        schema:
+          type: number
+      responses:
+        200:
+          description: A bunch of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rating:
+                      type: integer
+                      minimum: 1
+                      maximum: 5
+                    message:
+                      type: string
+                    uuid:
+                      type: string
+                      pattern: '^[0-9a-fA-F\-]{36}$'
+                    userId:
+                      type: string
+                      pattern: '^[0-9a-fA-F\-]{36}$'
+                      nullable: true
+    post:
+      description: Create a new review
+      requestBody:
+        description: A new Review
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                userId:
+                  type: string
+                  pattern: '^[0-9a-fA-F\-]{36}$'
+                  nullable: true
+      responses:
+        '201':
+          description: Successfully created a new Review
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rating:
+                      type: integer
+                      minimum: 1
+                      maximum: 5
+                      example: 1
+                    message:
+                      type: string
+                      example: An awesome time for the whole family.
+                    uuid:
+                      type: string
+                      pattern: '^[0-9a-fA-F\-]{36}$'
+                    userId:
+                      type: string
+                      pattern: '^[0-9a-fA-F\-]{36}$'
+                      nullable: true                  
+  /reviews/{reviewId}:
+    get:
+      description: Get a single review object
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          schema:
+            type: string
+            description: The review's ID
+            example: 3b5b1707-b82c-4b1d-9078-157053902525
+      responses:
+        '200':
+          description: A single review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 3b5b1707-b82c-4b1d-9078-157053902525
+                  rating:
+                    type: integer
+                    example: 5
+                    minimum: 1
+                    maximum: 5
+                  userId:
+                    minLength: 36
+                    maxLength: 36
+                    pattern: '^[a-zA-Z0-9-]+$'
+                    nullable: true
+                    example: 3b5b1707-b82c-4b1d-9078-157053902525
+                  uuid:
+                    minLength: 36
+                    maxLength: 36
+                    pattern: '^[a-zA-Z0-9-]+$'
+                    example: 3b5b1707-b82c-4b1d-9078-157053902525            
+                  
+                  
